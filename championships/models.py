@@ -3,8 +3,14 @@ from django.db import models
 from fields.models import Field
 from users.models import User
 
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-class Team(models.Model):
+    class Meta:
+        abstract = True
+
+class Team(BaseModel):
     name = models.CharField(max_length=100)
     logo = models.ImageField(upload_to='team_logos/', null=True, blank=True)
     description = models.TextField(blank=True)
@@ -15,7 +21,7 @@ class Team(models.Model):
         return self.name
 
 
-class Championship(models.Model):
+class Championship(BaseModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
     start_date = models.DateField()
@@ -23,7 +29,6 @@ class Championship(models.Model):
     field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='championships')
     teams = models.ManyToManyField(Team, related_name='championships')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='championships')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -34,7 +39,7 @@ class Championship(models.Model):
         return cls.objects.filter(created_by_id=user_id)
 
 
-class Match(models.Model):
+class Match(BaseModel):
     STATUS_CHOICES = (
         ('scheduled', 'Rejalashtirilgan'),
         ('in_progress', 'O\'yinda'),
