@@ -2,8 +2,14 @@ from django.db import models
 
 from users.models import User
 
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-class Field(models.Model):
+    class Meta:
+        abstract = True
+        
+class Field(BaseModel):
     SURFACE_CHOICES = (
         ('grass', 'Tabiiy Maysa'),
         ('artificial', "Sun'iy Maysa"),
@@ -41,9 +47,6 @@ class Field(models.Model):
     lat = models.FloatField()
     lng = models.FloatField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return self.name
 
@@ -53,7 +56,7 @@ class Field(models.Model):
         return cls.objects.filter(owner_id=user_id)
 
 
-class TimeSlot(models.Model):
+class TimeSlot(BaseModel):
     field = models.ForeignKey(Field, related_name='time_slots', on_delete=models.CASCADE)
     date = models.DateField()
     start = models.TimeField()
@@ -69,7 +72,7 @@ class TimeSlot(models.Model):
         return f"{self.field.name} - {self.date} {self.start}-{self.end}"
 
 
-class Booking(models.Model):
+class Booking(BaseModel):
     STATUS_CHOICES = (
         ('pending', 'Kutilmoqda'),
         ('confirmed', 'Tasdiqlangan'),
@@ -79,7 +82,6 @@ class Booking(models.Model):
     time_slot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.time_slot}"
