@@ -12,17 +12,17 @@ class BaseModel(models.Model):
 
 
 class Field(BaseModel):
-    SURFACE_CHOICES = (
-        ('grass', 'Tabiiy Maysa'),
-        ('artificial', "Sun'iy Maysa"),
-        ('indoor', 'Yopiq Maydon'),
-    )
+    # SURFACE_CHOICES = (
+    #     ('grass', 'Tabiiy Maysa'),
+    #     ('artificial', "Sun'iy Maysa"),
+    #     ('indoor', 'Yopiq Maydon'),
+    # )
 
-    SIZE_CHOICES = (
-        ('5v5', '5x5'),
-        ('7v7', '7x7'),
-        ('11v11', '11x11'),
-    )
+    # SIZE_CHOICES = (
+    #     ('5v5', '5x5'),
+    #     ('7v7', '7x7'),
+    #     ('11v11', '11x11'),
+    # )
 
     DAYS_OF_WEEK = (
         ('Monday', 'Dushanba'),
@@ -39,8 +39,8 @@ class Field(BaseModel):
     address = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fields')
     contact = models.CharField(max_length=50)
-    surface = models.CharField(max_length=20, choices=SURFACE_CHOICES)
-    size = models.CharField(max_length=10, choices=SIZE_CHOICES)
+    surface = models.CharField(max_length=20)
+    size = models.CharField(max_length=10)
     amenities = models.JSONField(default=list)  # Store as JSON array
     working_days = models.JSONField(default=list)  # Store as JSON array of days
     images = models.JSONField(default=list)  # Store URLs as JSON array
