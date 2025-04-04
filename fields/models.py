@@ -2,13 +2,15 @@ from django.db import models
 
 from users.models import User
 
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
-        
+
+
 class Field(BaseModel):
     SURFACE_CHOICES = (
         ('grass', 'Tabiiy Maysa'),
