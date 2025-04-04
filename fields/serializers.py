@@ -14,7 +14,7 @@ class FieldSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Field
-        fields = ['id', 'name', 'description', 'address', 'owner', 'contact',
+        fields = ['id', 'name', 'description', 'address', 'contact',
                   'surface', 'size', 'amenities', 'working_days', 'images',
                   'lat', 'lng', 'time_slots', 'created_at']
 
