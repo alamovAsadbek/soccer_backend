@@ -43,7 +43,7 @@ class Field(BaseModel):
     size = models.CharField(max_length=10)
     amenities = models.JSONField(default=list)  # Store as JSON array
     working_days = models.JSONField(default=list)  # Store as JSON array of days
-    images = models.JSONField(default=list)  # Store URLs as JSON array
+    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
 
     # Location coordinates
     lat = models.FloatField()
@@ -56,6 +56,14 @@ class Field(BaseModel):
     @classmethod
     def get_user_fields(cls, user_id):
         return cls.objects.filter(owner_id=user_id)
+
+
+class FieldImages(BaseModel):
+    field = models.ForeignKey(Field, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='media')
+
+    def __str__(self):
+        return f"{self.field.name} - {self.image.name}"
 
 
 class TimeSlot(BaseModel):
