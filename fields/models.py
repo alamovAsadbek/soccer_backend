@@ -59,6 +59,14 @@ class Field(BaseModel):
         return cls.objects.filter(owner_id=user_id)
 
 
+class FieldImages(BaseModel):
+    field = models.ForeignKey(Field, related_name='image_set', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='media')
+
+    def __str__(self):
+        return f"{self.field.name} - {self.image.name}"
+
+
 class TimeSlot(BaseModel):
     field = models.ForeignKey(Field, related_name='time_slots', on_delete=models.CASCADE)
     date = models.DateField()
