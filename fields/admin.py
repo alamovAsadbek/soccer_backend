@@ -4,9 +4,10 @@ from .models import Field, TimeSlot, Booking
 admin.site.site_header = 'Football Field Admin Panel'
 admin.site.site_title = 'Football Field Admin'
 
+
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name', 'contact', 'size', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'contact', 'size', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
     search_fields = ('name', 'contact', 'size',)
     ordering = ('-created_at', '-updated_at')
@@ -15,6 +16,7 @@ class FieldAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name_plural = 'Field Models'
         verbose_name = 'Field Model'
+
 
 @admin.register(TimeSlot)
 class TimeSlotAdmin(admin.ModelAdmin):
@@ -27,6 +29,7 @@ class TimeSlotAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name_plural = 'TimeSlot Models'
         verbose_name = 'TimeSlot Model'
+
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
