@@ -20,7 +20,7 @@ class FieldSerializer(serializers.ModelSerializer):
         model = Field
         fields = ['id', 'name', 'description', 'address', 'contact',
                   'surface', 'size', 'amenities', 'working_days', 'images',
-                  'lat', 'lng', 'time_slots', 'created_at']
+                  'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour']
 
     def create(self, validated_data):
         images = validated_data.pop('images', [])
