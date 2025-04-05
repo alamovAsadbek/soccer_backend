@@ -1,29 +1,15 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from .models import Field, TimeSlot, Booking
+from .permissions import IsOwnerOrReadOnly
 from .serializers import FieldSerializer, TimeSlotSerializer, BookingSerializer
-
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.owner == request.user
 
 
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
     serializer_class = FieldSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            raise PermissionDenied("User not authenticated")
-
-        queryset = self.queryset.filter(owner=self.request.user)
-        return queryset
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
