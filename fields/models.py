@@ -41,7 +41,7 @@ class Field(BaseModel):
     contact = models.CharField(max_length=50)
     surface = models.CharField(max_length=20)
     size = models.CharField(max_length=10)
-    amenities = models.JSONField(default=list)  # Store as JSON array
+    amenities = models.CharField(max_length=255)
     working_days = models.JSONField(default=list)  # Store as JSON array of days
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     images = models.JSONField(default=list)
