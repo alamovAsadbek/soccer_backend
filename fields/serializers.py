@@ -26,7 +26,7 @@ class FieldSerializer(serializers.ModelSerializer):
         model = Field
         fields = [
             'id', 'name', 'description', 'address', 'contact',
-            'surface', 'size', 'amenities', 'working_days',
+            'surface', 'size', 'owner_name', 'working_days',
             'images',
             'uploaded_images',
             'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour'
