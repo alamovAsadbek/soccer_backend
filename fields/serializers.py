@@ -9,25 +9,36 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         fields = ['id', 'field', 'date', 'start', 'end', 'price', 'is_booked']
 
 
+class FieldImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FieldImages
+        fields = ['id', 'image']
+
+
 class FieldSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
-    images = serializers.ListField(
-        child=serializers.ImageField(),
-        write_only=True,
-        required=False
+    images = FieldImagesSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(), write_only=True, required=False
     )
+
     class Meta:
         model = Field
-        fields = ['id', 'name', 'description', 'address', 'contact',
-                  'surface', 'size', 'amenities', 'working_days', 'images',
-                  'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour']
+        fields = [
+            'id', 'name', 'description', 'address', 'contact',
+            'surface', 'size', 'amenities', 'working_days',
+            'images',  # o‘qish uchun
+            'uploaded_images',  # faqat yozish uchun
+            'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour'
+        ]
 
     def create(self, validated_data):
-        images = validated_data.pop('images', [])
+        uploaded_images = validated_data.pop('uploaded_images', [])
         field = Field.objects.create(**validated_data)
-        for image in images:
+        for image in uploaded_images:
             FieldImages.objects.create(field=field, image=image)
         return field
+
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
