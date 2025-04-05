@@ -17,6 +17,7 @@ class Field(BaseModel):
     address = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='fields')
     contact = models.CharField(max_length=50)
+    owner_name = models.CharField(max_length=100)
     surface = models.CharField(max_length=20)
     size = models.CharField(max_length=10)
     amenities = models.CharField(max_length=255)
