@@ -29,6 +29,9 @@ class Field(BaseModel):
     def __str__(self):
         return self.name
 
+    def get_user_fields(self, user):
+        return Field.objects.filter(owner=user)
+
 
 class FieldImages(BaseModel):
     field = models.ForeignKey(Field, related_name='images', on_delete=models.CASCADE)
