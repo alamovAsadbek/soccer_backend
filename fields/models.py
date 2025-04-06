@@ -29,8 +29,9 @@ class Field(BaseModel):
     def __str__(self):
         return self.name
 
-    def get_user_fields(self, user):
-        return Field.objects.filter(owner=user)
+    @classmethod
+    def get_user_fields(cls, user_id):
+        return cls.objects.filter(owner_id=user_id)
 
 
 class FieldImages(BaseModel):

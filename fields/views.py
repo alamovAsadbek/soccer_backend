@@ -7,7 +7,7 @@ from .serializers import FieldSerializer, TimeSlotSerializer, BookingSerializer
 
 
 class FieldViewSet(viewsets.ModelViewSet):
-    queryset = Field.objects.all()
+    queryset = Field.objects.all().order_by('-updated_at')
     serializer_class = FieldSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
@@ -16,7 +16,7 @@ class FieldViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def user(self, request):
-        fields = Field.get_user_fields(request.user.id)
+        fields = Field.objects.filter(owner=request.user).order_by('-updated_at')
         serializer = self.get_serializer(fields, many=True)
         return Response(serializer.data)
 
