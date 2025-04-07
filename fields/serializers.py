@@ -17,7 +17,7 @@ class FieldImagesSerializer(serializers.ModelSerializer):
 
 class FieldSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
-    images = FieldImagesSerializer(many=True, read_only=True)
+    images = serializers.SerializerMethodField()
     uploaded_images = serializers.ListField(
         child=serializers.ImageField(), write_only=True, required=False
     )
@@ -27,10 +27,13 @@ class FieldSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'description', 'address', 'contact',
             'surface', 'size', 'owner_name', 'working_days',
-            'images',
-            'uploaded_images',
+            'images', 'uploaded_images',
             'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour'
         ]
+
+    def get_images(self, obj):
+        request = self.context.get('request')
+        return [request.build_absolute_uri(img.image.url) for img in obj.images.all()]
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop('uploaded_images', [])
@@ -38,6 +41,21 @@ class FieldSerializer(serializers.ModelSerializer):
         for image in uploaded_images:
             FieldImages.objects.create(field=field, image=image)
         return field
+
+    def update(self, instance, validated_data):
+        uploaded_images = validated_data.pop('uploaded_images', [])
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if uploaded_images:
+            instance.images.all().delete()
+            for image in uploaded_images:
+                FieldImages.objects.create(field=instance, image=image)
+
+        return instance
+
 
 
 class BookingSerializer(serializers.ModelSerializer):
