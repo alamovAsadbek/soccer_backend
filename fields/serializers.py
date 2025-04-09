@@ -6,7 +6,7 @@ from fields.models import TimeSlot, Field, Booking, FieldImages
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
-        fields = ['id', 'field', 'date', 'start', 'end', 'price', 'is_booked']
+        fields = ['id', 'field', 'date', 'start', 'user_full_name', 'user_phone', 'end', 'price', 'is_booked']
 
 
 class FieldImagesSerializer(serializers.ModelSerializer):
@@ -55,7 +55,6 @@ class FieldSerializer(serializers.ModelSerializer):
                 FieldImages.objects.create(field=instance, image=image)
 
         return instance
-
 
 
 class BookingSerializer(serializers.ModelSerializer):
