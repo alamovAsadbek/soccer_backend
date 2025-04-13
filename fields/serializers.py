@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from fields.models import TimeSlot, Field, Booking, FieldImages
@@ -16,6 +18,7 @@ class FieldImagesSerializer(serializers.ModelSerializer):
 
 
 from rest_framework import serializers
+
 
 class FieldSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
@@ -37,22 +40,38 @@ class FieldSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         return [request.build_absolute_uri(img.image.url) for img in obj.images.all()]
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        # faqat true bo'lgan kunlarni yuborish
-        working_days_dict = instance.working_days or {}
-        # JSON fieldni listdan dictga o'zgartirish
-        data['working_days'] = [day for day, val in working_days_dict.items() if val]
-        return data
-
     def to_internal_value(self, data):
         data = data.copy()
-        working_days_list = data.get('working_days', [])
-        # faqat tanlangan kunlarni true qilib saqlaymiz
-        if isinstance(working_days_list, list):
+
+        working_days = data.get('working_days')
+
+        if isinstance(working_days, list) and len(working_days) == 1 and isinstance(working_days[0], dict):
+            working_days = working_days[0]
+
+        elif isinstance(working_days, str):
+            try:
+                working_days = json.loads(working_days)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError({'working_days': 'Invalid JSON format.'})
+
+        if isinstance(working_days, list):
             all_days = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba']
-            data['working_days'] = {day: (day in working_days_list) for day in all_days}
+            data['working_days'] = {day: (day in working_days) for day in all_days}
+            print(data)
+        elif isinstance(working_days, dict):
+            data['working_days'] = working_days
+
+        else:
+            raise serializers.ValidationError({'working_days': 'Invalid format. Must be list or dict.'})
+
         return super().to_internal_value(data)
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        wd = rep.get('working_days', {})
+        if isinstance(wd, dict):
+            rep['working_days'] = [day for day, value in wd.items() if value]
+        return rep
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop('uploaded_images', [])
@@ -74,8 +93,6 @@ class FieldSerializer(serializers.ModelSerializer):
                 FieldImages.objects.create(field=instance, image=image)
 
         return instance
-
-
 
 
 class BookingSerializer(serializers.ModelSerializer):
