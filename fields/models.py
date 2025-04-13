@@ -23,8 +23,7 @@ class Field(BaseModel):
     amenities = models.CharField(max_length=255)
     working_days = models.JSONField(default=list)
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
-    lat = models.FloatField()
-    lng = models.FloatField()
+    location = models.JSONField()
 
     def __str__(self):
         return self.name
