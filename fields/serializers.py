@@ -32,7 +32,7 @@ class FieldSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'description', 'address', 'contact',
             'surface', 'size', 'owner_name', 'working_days',
-            'images', 'uploaded_images',
+            'images', 'uploaded_images', 'lat', 'lng',
             'time_slots', 'created_at', 'price_per_hour'
         ]
         read_only_fields = ['working_days', 'created_at']
