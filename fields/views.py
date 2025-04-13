@@ -12,14 +12,19 @@ class FieldViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
+        # Yaratilgan fieldni hozirgi foydalanuvchi bilan saqlash
         serializer.save(owner=self.request.user)
 
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def user(self, request):
+        # Foydalanuvchining o'ziga tegishli maydonlarni olish
         fields = Field.objects.filter(owner=request.user).order_by('-updated_at')
         serializer = self.get_serializer(fields, many=True)
         return Response(serializer.data)
 
+    def perform_update(self, serializer):
+        # Update qilishda ham shu ruxsat beriladi
+        serializer.save(owner=self.request.user)
 
 class TimeSlotViewSet(viewsets.ModelViewSet):
     queryset = TimeSlot.objects.all()
