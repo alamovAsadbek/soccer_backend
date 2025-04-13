@@ -42,13 +42,9 @@ class FieldSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data = data.copy()
-
         working_days = data.get('working_days')
 
-        if isinstance(working_days, list) and len(working_days) == 1 and isinstance(working_days[0], dict):
-            working_days = working_days[0]
-
-        elif isinstance(working_days, str):
+        if isinstance(working_days, str):
             try:
                 working_days = json.loads(working_days)
             except json.JSONDecodeError:
@@ -57,7 +53,8 @@ class FieldSerializer(serializers.ModelSerializer):
         if isinstance(working_days, list):
             all_days = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba']
             data['working_days'] = {day: (day in working_days) for day in all_days}
-            print(data)
+            print(data['working_days'])
+            print('data', data)
         elif isinstance(working_days, dict):
             data['working_days'] = working_days
 
