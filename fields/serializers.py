@@ -30,7 +30,7 @@ class FieldSerializer(serializers.ModelSerializer):
             'id', 'name', 'description', 'address', 'contact',
             'surface', 'size', 'owner_name', 'working_days',
             'images', 'uploaded_images',
-            'lat', 'lng', 'time_slots', 'created_at', 'price_per_hour'
+            'time_slots', 'created_at', 'price_per_hour'
         ]
 
     def get_images(self, obj):
