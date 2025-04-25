@@ -1,6 +1,8 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+
+from django.core.wsgi import get_wsgi_application
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,9 +19,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False')
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['144.126.221.143', 'https://maydon.cyberrs.uz']
 
 # Application definition
 
@@ -72,7 +74,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'football_fields_project.wsgi.application'
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'football_fields_project.settings')
+
+application = get_wsgi_application()
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
