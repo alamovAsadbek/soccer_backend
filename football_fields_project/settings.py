@@ -74,9 +74,6 @@ TEMPLATES = [
     },
 ]
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'football_fields_project.settings')
-
-application = get_wsgi_application()
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
