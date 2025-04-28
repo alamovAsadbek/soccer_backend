@@ -19,9 +19,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['144.126.221.143', 'https://maydon.cyberrs.uz']
+ALLOWED_HOSTS = ['144.126.221.143', 'https://maydon.cyberrs.uz', 'localhost', '127.0.0.1', '[::1]']
 
 # Application definition
 
@@ -73,7 +73,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
