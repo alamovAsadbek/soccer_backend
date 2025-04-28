@@ -19,7 +19,7 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['144.126.221.143', 'https://maydon.cyberrs.uz', 'localhost', '127.0.0.1', '[::1]']
 
